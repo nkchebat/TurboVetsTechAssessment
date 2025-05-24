@@ -10,7 +10,7 @@ export class FakeAuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     // Simulate logged-in user (user with ID = 1)
     const user = await this.dataSource.getRepository(User).findOne({
-      where: { id: 3 },
+      where: { id: 1 },
       relations: ['organization'],
     });
 

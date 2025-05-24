@@ -10,15 +10,18 @@ export class OrgsService {
     private orgRepo: Repository<Organization>,
   ) {}
 
-  create(orgData: Partial<Organization>) {
-  console.log('📥 Service received orgData:', orgData);
+  async create(data: Partial<Organization>) {
+    const org = this.orgRepo.create(data);
+    const saved = await this.orgRepo.save(org);
 
-  const org = this.orgRepo.create(orgData);
-  console.log('🧱 Org entity created:', org);
+    // Audit log stub
+    console.log(`[AUDIT] Created organization ${saved.name}`, {
+      orgId: saved.id,
+      timestamp: new Date().toISOString(),
+    });
 
-  return this.orgRepo.save(org); // this is where failure likely happens
-}
-
+    return saved;
+  }
 
   findAll() {
     return this.orgRepo.find({ relations: ['parent', 'children', 'users'] });

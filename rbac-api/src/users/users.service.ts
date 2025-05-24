@@ -10,9 +10,18 @@ export class UsersService {
     private usersRepo: Repository<User>,
   ) {}
 
-  create(userData: Partial<User>) {
-    const user = this.usersRepo.create(userData);
-    return this.usersRepo.save(user);
+  async create(data: Partial<User>) {
+    const user = this.usersRepo.create(data);
+    const saved = await this.usersRepo.save(user);
+
+    console.log(`[AUDIT] Created user ${saved.name}`, {
+      email: saved.email,
+      orgId:
+        saved.organization?.id ?? (data as any).organizationId ?? 'unknown',
+      timestamp: new Date().toISOString(),
+    });
+
+    return saved;
   }
 
   findAll() {

@@ -62,4 +62,31 @@ describe('RecordsService', () => {
       expect(service.canAccess(user, record)).toBe(false);
     });
   });
+
+  describe('canAccess with sibling orgs', () => {
+    const parentOrg = { id: 1 };
+    const childOrgA = { id: 2, parent: parentOrg };
+    const childOrgB = { id: 3, parent: parentOrg };
+
+    const record = {
+      id: 99,
+      owner: { id: 10 },
+      organization: childOrgA,
+    };
+
+    it('denies access to Admin in sibling org', () => {
+      const user = { id: 20, role: 'Admin', organization: childOrgB };
+      expect(service.canAccess(user, record)).toBe(false);
+    });
+
+    it('denies access to Viewer in sibling org', () => {
+      const user = { id: 30, role: 'Viewer', organization: childOrgB };
+      expect(service.canAccess(user, record)).toBe(false);
+    });
+
+    it('allows access to Admin in same org', () => {
+      const user = { id: 40, role: 'Admin', organization: childOrgA };
+      expect(service.canAccess(user, record)).toBe(true);
+    });
+  });
 });

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PatientRecord } from './patient-record.entity';
@@ -10,8 +14,20 @@ export class RecordsService {
     private recordRepo: Repository<PatientRecord>,
   ) {}
 
-  create(data: Partial<PatientRecord>) {
-    const record = this.recordRepo.create(data);
+  async create(data: Partial<PatientRecord>) {
+    const record = this.recordRepo.create({
+      ...data,
+      organization: { id: Number(data.organization) },
+      owner: { id: Number(data.owner) },
+    });
+
+    console.log(`[AUDIT] Created record for ${record.name}`, {
+      diagnosis: record.diagnosis,
+      orgId: record.organization?.id ?? 'unknown',
+      ownerId: record.owner?.id ?? 'unknown',
+      timestamp: new Date().toISOString(),
+    });
+
     return this.recordRepo.save(record);
   }
 
@@ -77,10 +93,19 @@ export class RecordsService {
     }
 
     if (!this.canAccess(user, record) || user.role === 'Viewer') {
-      throw new ForbiddenException('You do not have permission to edit this record.');
+      throw new ForbiddenException(
+        'You do not have permission to edit this record.',
+      );
     }
 
     Object.assign(record, updates);
+
+    // Audit log stub for update
+    console.log(`[AUDIT] Record ${id} updated by user ${user.id}`, {
+      updates,
+      timestamp: new Date().toISOString(),
+    });
+
     return this.recordRepo.save(record);
   }
 }

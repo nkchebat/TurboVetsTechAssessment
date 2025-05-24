@@ -1,98 +1,191 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# TurboVets RBAC System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The **TurboVets RBAC System** is a streamlined **Role-Based Access Control (RBAC)** API built specifically for a veteran healthcare application. Developed using a modern tech stack—**NestJS**, **TypeScript**, **TypeORM**, and **SQLite**—this repository demonstrates a secure, hierarchical access control system with clear modular architecture, comprehensive testing strategies, and integrated audit logging for critical operations. This system serves as a robust, scalable foundation, clearly highlighting best practices for permission management and data security in healthcare-oriented applications.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Setup Instructions
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+### 1. Clone and Install
 
 ```bash
-$ npm install
+git clone https://github.com/nkchebat/TurboVetsTechAssessment.git
+cd rbac-api
+npm install
 ```
 
-## Compile and run the project
+### 2. Start the Server
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run start:dev
 ```
 
-## Run tests
+**Server URL:** `http://localhost:3000`
+
+### 3. Run Unit Tests
+
+- **Unit tests:**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run test
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **End-to-end (e2e) tests:**
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run test:e2e
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 4. Use Thunder Client for Endpoint Testing
 
-## Resources
+Import the `TurboVets_API_Collection.json` provided into Thunder Client (VS Code) to test endpoints easily.
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## API Documentation
 
-## Support
+| Method | Endpoint         | Roles Allowed           | Description                            |
+|--------|------------------|-------------------------|----------------------------------------|
+| POST   | `/orgs`          | Admin                   | Create a new organization              |
+| GET    | `/orgs`          | Admin                   | List all organizations                 |
+| POST   | `/users`         | Admin                   | Create a new user                      |
+| GET    | `/users`         | Any                     | List all users                         |
+| POST   | `/records`       | Owner, Admin            | Create a patient record                |
+| GET    | `/records`       | Owner, Admin, Viewer    | View accessible patient records        |
+| GET    | `/records/:id`   | Owner, Admin, Viewer    | View specific patient record           |
+| PATCH  | `/records/:id`   | Owner, Admin            | Update patient record                  |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Data Model
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Organization**:
+  - `id`: number
+  - `name`: string
+  - `parent`: optional reference to another Organization
+  - Supports a simple hierarchy (max 2 levels: parent → child)
+  - **Note**: Access control is limited to a user's own org. Users in sibling or parent orgs **do not** have inherited access.
 
-## License
+- **User**:
+  - `id`: number
+  - `name`: string
+  - `email`: string
+  - `role`: `'Admin' | 'Owner' | 'Viewer'`
+  - Linked to one Organization
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **PatientRecord**:
+  - `id`: number
+  - `name`: string
+  - `diagnosis`: string
+  - Linked to one Owner (`User`)
+  - Linked to one Organization
+
+---
+
+## Access Control Logic
+
+| Role   | Own Records | Same Org Records | Edit Privileges |
+|--------|-------------|-------------|-----------------|
+| Owner  | ✅          | ❌          | ✅              |
+| Admin  | ✅          | ✅          | ✅              |
+| Viewer | ✅          | ✅          | ❌              |
+
+> **Note on Hierarchy**: Organizations can have a simple two-level hierarchy (parent and child).  
+> However, access to "Org Records" is **strictly limited to a user's own organization**.  
+> - Admins and Viewers in a **sibling org** (i.e., different child orgs under the same parent) **cannot** access each other’s records.  
+> - Parent orgs **do not inherit** access to child org records, and vice versa.
+
+
+### Audit Logging
+
+Audit logging allows for a historical record to be created whenever a user performs a significant action in the system. This includes events such as creating organizations, adding users, and modifying patient records.
+
+Each audit log includes contextual details—such as who performed the action, what was changed, when it occurred, and which resource was affected. In this system, audit logs are output to the server console to simulate how logs might be collected in a real production environment (e.g., sent to a logging service like Datadog or stored in an audit table).
+
+```bash
+[AUDIT] Created record for John Doe {
+  diagnosis: "Anxiety",
+  orgId: 1,
+  ownerId: 1,
+  timestamp: "2025-05-24T02:20:15Z"
+}
+```
+
+---
+
+## Testing Strategy
+
+This project includes a robust testing suite that verifies both the internal logic and the real-world behavior of the application.
+
+### Unit Tests (Jest):
+Unit tests are written for:
+
+- **Controllers**: Ensuring each endpoint behaves as expected and properly delegates to services.
+- **Services**: Validate logic around creating, updating, and fetching records, as well as filtering visibility based on the user's role and organization.
+- **Access Control Logic**: The `canAccess()` method is thoroughly tested for all role and ownership scenarios, including both valid and denied access.
+
+These tests use mocked dependencies to isolate the logic under test, making them fast and reliable. All unit tests are run using the standard command:
+
+```bash
+npm run test
+```
+
+### End-to-End (E2E) Tests (Supertest)
+
+A dedicated e2e test validates the actual behavior of the API in a fully initialized environment. It verifies:
+
+- The ability to create users and organizations
+- The creation of a patient record by an authorized user
+- The returned response contains correct organization and ownership references
+
+These tests use Supertest to simulate real HTTP requests against the running server, mimicking how a client would interact with the API. To run them use the 
+command:
+
+```bash
+npm run test:e2e
+```
+
+Together, these tests demonstrate that the system works as expected under both isolated and integrated conditions, covering all the critical RBAC logic.
+---
+
+## Future Considerations
+
+This implementation lays the groundwork for a secure and maintainable RBAC system. In a production environment or with additional development time, the following areas could be expanded:
+
+### Extendability
+
+- Deep Organizational Hierarchies: Currently, the system supports only a two-level org structure (parent-child). In real-world applications, a recursive hierarchy (e.g., regional → hospital → department) with inherited permissions may be required.
+
+- Delegated Access: Support for temporary or limited delegation (e.g., "Dr. Smith can access these records for 2 days") would enhance flexibility in clinical workflows.
+
+- Role Inheritance & Custom Roles: Allowing roles to inherit permissions or defining fine-grained custom roles would offer greater control over edge cases and evolving team structures.
+
+### Security Considerations
+
+- Authentication: Integrating proper authentication (e.g., JWT or OAuth2) would replace the simulated middleware and ensure secure, user-specific sessions.
+
+- Input Validation and Sanitization: Stronger validation (e.g., using class-validator) should be applied to all request bodies to protect against injection attacks and malformed input.
+
+- Secure Headers and HTTPS: In production, serving over HTTPS with strict CORS policies and secure HTTP headers would be mandatory.
+
+- Audit Persistence: Current audit logs are printed to the console. These should be written to a persistent and tamper-evident logging service (e.g., a write-once table, external service like Datadog or ELK stack).
+
+### Performance Optimizations
+
+- Database Indexing: Adding indexes on foreign keys (e.g., organizationId, ownerId) and frequently queried fields would significantly speed up permission checks.
+
+- Query Optimization: Instead of eager loading all relations, lazy loading or carefully selected joins can reduce overhead.
+
+- Caching: Common queries (e.g., GET /records for a given user) could be cached using Redis or in-memory stores to reduce DB load in high-traffic environments.
+
+### Additional Features
+
+- Soft Deletes: Instead of permanently deleting records, implementing soft deletes allows better traceability and recovery in healthcare environments.
+
+- Admin Dashboards: Building a frontend UI for managing users, organizations, and permissions would make the system usable by non-technical administrators.
+
+- Audit Dashboard: Visualizing historical actions (record updates, user changes) would provide valuable insight for compliance and internal reviews.
+
+- Pagination & Filtering: For large datasets, endpoints like GET /records should support pagination, filtering, and sorting to improve client performance and usability.
+---
+
